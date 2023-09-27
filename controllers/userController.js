@@ -125,7 +125,7 @@ exports.verifyOtp = asyncHandler(async (req, res, next) => {
 	let otp = req.params.otp;
 	let email = req.params.email;
 	let doc = await Otp.findOne({ email: email });
-	if (otp === doc.token) {
+	if (doc && otp === doc.token) {
 		await Otp.deleteOne({ email: email });
 		res.status(200).json({ message: 'Email verified successfully.' });
 	} else {
