@@ -187,6 +187,26 @@ exports.getAllOffers = asyncHandler(async (req, res) => {
 	res.status(200).json({ offers });
 });
 
+exports.getSingleOffer = asyncHandler(async (req, res) => {
+	const offer = await Offer.findById(req.params.id);
+	res.status(200).json({ offer });
+});
+
+exports.editOffer = asyncHandler(async (req, res) => {
+	let images = req.uploadedUrls;
+	await Offer.findByIdAndUpdate(req.params.id, { ...req.body, images });
+	res.status(201).json({ message: 'Offer edited' });
+});
+
+exports.deleteOffer = asyncHandler(async (req, res) => {
+	let offer = await Offer.findById(req.params.id);
+	if (offer.images.length > 0) {
+		await AWS.deleteImages(offer.images);
+	}
+	await Offer.findByIdAndDelete(req.params.id);
+	res.status(200).json({ message: 'Deleted Successfully' });
+});
+
 exports.getUsers = asyncHandler(async (req, res, next) => {
 	const totalUsers = await User.countDocuments();
 	const page = parseInt(req.query.page) || 1;

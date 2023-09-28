@@ -14,14 +14,6 @@ router.post(
 );
 
 //TODO : Random
-router.post(
-	'/offer/add',
-	authenticate.verifyAdmin,
-	AWS.multerUpload.array('images'),
-	AWS.returnedUrls,
-	adminController.addOffer
-);
-router.get('/offer', authenticate.verifyAdmin, adminController.getAllOffers);
 router.get('/users', authenticate.verifyAdmin, adminController.getUsers);
 router.get(
 	'/users/search',
@@ -29,6 +21,33 @@ router.get(
 	adminController.searchUser
 );
 router.get('/dashboard', authenticate.verifyAdmin, adminController.bestSellers);
+
+//TODO: Offers
+router.get('/offers', authenticate.verifyAdmin, adminController.getAllOffers);
+router.get(
+	'/offer/:id',
+	authenticate.verifyAdmin,
+	adminController.getSingleOffer
+);
+router.post(
+	'/offer/add',
+	authenticate.verifyAdmin,
+	AWS.multerUpload.array('images'),
+	AWS.returnedUrls,
+	adminController.addOffer
+);
+router.patch(
+	'/offer/edit/:id',
+	authenticate.verifyAdmin,
+	AWS.multerUpload.array('images'),
+	AWS.returnedUrls,
+	adminController.editOffer
+);
+router.delete(
+	'/offer/delete/:id',
+	authenticate.verifyAdmin,
+	adminController.deleteOffer
+);
 
 //TODO : Categories
 router.get(
