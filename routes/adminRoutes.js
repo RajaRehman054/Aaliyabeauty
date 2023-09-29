@@ -169,13 +169,8 @@ router.patch(
 	authenticate.verifyAdmin,
 	adminController.editBrand
 );
-router.patch(
-	'/category/edit/:id',
-	authenticate.verifyAdmin,
-	adminController.editBrand
-);
 router.delete(
-	'/category/delete/:id',
+	'/brand/delete/:id',
 	authenticate.verifyAdmin,
 	adminController.deleteBrand
 );
