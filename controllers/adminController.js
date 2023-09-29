@@ -90,14 +90,24 @@ exports.deleteCategory = asyncHandler(async (req, res) => {
 });
 
 exports.getCategories = asyncHandler(async (req, res, next) => {
+	const categories = [];
 	const totalCategories = await Category.countDocuments();
 	const page = parseInt(req.query.page) || 1;
 	const perPage = 20;
 	const totalPages = Math.ceil(totalCategories / perPage);
-	const categories = await Category.find({})
+	const tempCategories = await Category.find({})
 		.populate('brand')
 		.skip((page - 1) * perPage)
 		.limit(perPage);
+	for (let index = 0; index < tempCategories.length; index++) {
+		let category = await Product.countDocuments({
+			category: tempCategories[index].id,
+		});
+		categories.push({
+			data: tempCategories[index],
+			totalProducts: category,
+		});
+	}
 	res.json({
 		totalPages,
 		totalCategories,
@@ -307,6 +317,7 @@ exports.deleteBrand = asyncHandler(async (req, res) => {
 });
 
 exports.getBrands = asyncHandler(async (req, res, next) => {
+	const finalData = [];
 	const totalBrand = await Brand.countDocuments();
 	const page = parseInt(req.query.page) || 1;
 	const perPage = 20;
@@ -314,10 +325,23 @@ exports.getBrands = asyncHandler(async (req, res, next) => {
 	const brands = await Brand.find({})
 		.skip((page - 1) * perPage)
 		.limit(perPage);
+	for (let index = 0; index < brands.length; index++) {
+		let categories = await Category.find({
+			brand: brands[index].id,
+		}).select('id');
+		let data = await Product.countDocuments({
+			category: { $in: categories },
+		});
+		finalData.push({
+			data: brands[index],
+			totalProducts: data,
+		});
+	}
+	res;
 	res.json({
 		totalPages,
 		totalBrand,
-		brands,
+		brands: finalData,
 		perPage,
 		currentPage: page,
 	});
