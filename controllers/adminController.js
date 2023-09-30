@@ -337,7 +337,6 @@ exports.getBrands = asyncHandler(async (req, res, next) => {
 			totalProducts: data,
 		});
 	}
-	res;
 	res.json({
 		totalPages,
 		totalBrand,

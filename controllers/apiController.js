@@ -6,6 +6,8 @@ var Order = require('../models/order');
 var Product = require('../models/product');
 var Category = require('../models/category');
 var Brand = require('../models/brand');
+var Review = require('../models/review');
+var Offer = require('../models/offers');
 
 exports.createOrderCustomer = asyncHandler(async (req, res, next) => {
 	if (req.cookies['jwt']) {
@@ -147,4 +149,27 @@ exports.getAllProductsOfBrand = asyncHandler(async (req, res, next) => {
 		},
 	});
 	res.status(200).json(products);
+});
+
+exports.searchProduct = asyncHandler(async (req, res, next) => {
+	let query = req.query.name;
+	var products = await Product.find({
+		name: { $regex: new RegExp(query, 'i') },
+	});
+	res.status(200).json(products);
+});
+
+exports.getProductReviews = asyncHandler(async (req, res, next) => {
+	const reviews = await Review.find({ product: req.params.id });
+	res.status(200).json(reviews);
+});
+
+exports.getProduct = asyncHandler(async (req, res, next) => {
+	const product = await Product.findById(req.params.id);
+	res.status(200).json(product);
+});
+
+exports.getOffers = asyncHandler(async (req, res, next) => {
+	const offers = await Offer.findById(req.params.id);
+	res.status(200).json(offers);
 });
