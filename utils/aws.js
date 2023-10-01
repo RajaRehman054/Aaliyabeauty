@@ -35,7 +35,11 @@ exports.deleteImages = async array => {
 				Bucket: process.env.AWS_BUCKET,
 				Key: key[1],
 			};
-			await s3.deleteObject(params).promise();
+			await s3
+				.deleteObject(params, function (err, data) {
+					if (err) console.log(err, err.stack);
+				})
+				.promise();
 		});
 	} catch (error) {
 		console.error('Error deleting file:', error);

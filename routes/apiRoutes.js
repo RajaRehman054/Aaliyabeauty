@@ -12,6 +12,7 @@ router.get('/product/:name', apiController.searchProduct);
 router.get('/product/single/:id', apiController.getProduct);
 router.get('/product/review/:id', apiController.getProductReviews);
 router.get('/offers', apiController.getOffers);
+router.get('/cart/items', apiController.getCartProducts);
 
 router.post(
 	'/order/create',

@@ -173,3 +173,13 @@ exports.getOffers = asyncHandler(async (req, res, next) => {
 	const offers = await Offer.findById(req.params.id);
 	res.status(200).json(offers);
 });
+
+exports.getCartProducts = asyncHandler(async (req, res, next) => {
+	let { array } = req.body;
+	var data = [];
+	for (let index = 0; index < array.length; index++) {
+		let product = await Product.findById(array[index]).populate('category');
+		data.push(product);
+	}
+	res.status(200).json(data);
+});
