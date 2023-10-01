@@ -9,15 +9,25 @@ const s3 = new AWS.S3({
 	region: process.env.AWS_REGION,
 });
 
+const multerFilter = (req, file, cb) => {
+	if (file.mimetype.startsWith('image')) {
+		cb(null, true);
+	} else {
+		cb(new Error('File type should be of images.', 400), false);
+	}
+};
+
 exports.multerUpload = multer({
 	storage: multerS3({
 		s3: s3,
 		bucket: process.env.AWS_BUCKET,
+		contentType: multerS3.AUTO_CONTENT_TYPE,
 		key: function (req, file, cb) {
 			const uniqueFilename = Date.now() + '-' + file.originalname;
 			cb(null, uniqueFilename);
 		},
 	}),
+	fileFilter: multerFilter,
 });
 
 exports.returnedUrls = async (req, res, next) => {
