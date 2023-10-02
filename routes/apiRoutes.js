@@ -8,6 +8,7 @@ router.get('/products/filter', apiController.getTrendingProducts);
 router.get('/categories', apiController.getCategories);
 router.get('/products/:name', apiController.getProductsByCategories);
 router.get('/products/brand/:name', apiController.getAllProductsOfBrand);
+router.get('/categories/products', apiController.getAllBrands);
 router.get('/product/:name', apiController.searchProduct);
 router.get('/product/single/:id', apiController.getProduct);
 router.get('/product/review/:id', apiController.getProductReviews);

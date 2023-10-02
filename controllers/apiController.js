@@ -183,3 +183,13 @@ exports.getCartProducts = asyncHandler(async (req, res, next) => {
 	}
 	res.status(200).json(data);
 });
+
+exports.getAllBrands = asyncHandler(async (req, res, next) => {
+	var data = [];
+	const brands = await Brand.find({});
+	for (let index = 0; index < brands.length; index++) {
+		let categories = await Category.find({ brand: brands[index].id });
+		data.push({ brand: brands[index], categories });
+	}
+	res.status(200).json(data);
+});

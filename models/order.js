@@ -40,6 +40,7 @@ var orderSchema = new Schema(
 		card_cvv: { type: Number },
 		card_date: { type: String },
 		user: { type: mongoose.Types.ObjectId, ref: 'User' },
+		payment: { type: String, default: 'card', enum: ['cod ', 'card'] },
 	},
 	{ timestamps: true }
 );
