@@ -59,7 +59,12 @@ exports.signIn = asyncHandler(async (req, res) => {
 });
 
 exports.addCategory = asyncHandler(async (req, res) => {
-	await Category.create({ name: req.body.name, brand: req.body.brand });
+	let image = req.uploadedUrls.length > 0 ? req.uploadedUrls[0] : null;
+	await Category.create({
+		name: req.body.name,
+		brand: req.body.brand,
+		image,
+	});
 	res.status(201).json({ message: 'Category added successfully' });
 });
 
@@ -79,12 +84,22 @@ exports.getCategoriesOfBrand = asyncHandler(async (req, res) => {
 });
 
 exports.editCategory = asyncHandler(async (req, res) => {
-	let update = { name: req.body.name, brand: req.body.brand };
+	let category = await Category.findById(req.params.id);
+	let image = req.uploadedUrls.length > 0 ? req.uploadedUrls[0] : null;
+	if (category.image !== null) {
+		await AWS.deleteImages([category.image]);
+	}
+	let update = { name: req.body.name, brand: req.body.brand, image };
 	await Category.findByIdAndUpdate(req.params.id, update);
 	res.status(200).json({ message: 'Edited successfully' });
 });
 
 exports.deleteCategory = asyncHandler(async (req, res) => {
+	let category = await Category.findById(req.params.id);
+	if (category.image !== null) {
+		await AWS.deleteImages([category.image]);
+	}
+	await Product.deleteMany({ category: req.params.id });
 	await Category.findByIdAndDelete(req.params.id);
 	res.status(200).json({ message: 'Deleted Successfully' });
 });
@@ -291,7 +306,13 @@ exports.searchOrder = asyncHandler(async (req, res, next) => {
 
 //TODO : brands
 exports.addBrand = asyncHandler(async (req, res) => {
-	await Brand.create({ name: req.body.name });
+	let image = req.uploadedUrls.length > 0 ? req.uploadedUrls[0] : null;
+	await Brand.create({
+		name: req.body.name,
+		image,
+		url: req.body.url,
+		description: req.body.description,
+	});
 	res.status(201).json({ message: 'Brand added successfully' });
 });
 
@@ -306,13 +327,32 @@ exports.getSingleBrand = asyncHandler(async (req, res) => {
 });
 
 exports.editBrand = asyncHandler(async (req, res) => {
-	let update = { name: req.body.name };
+	let brand = await Brand.findById(req.params.id);
+	let image = req.uploadedUrls.length > 0 ? req.uploadedUrls[0] : null;
+	if (brand.image !== null) {
+		await AWS.deleteImages([brand.image]);
+	}
+	let update = { ...req.body, image };
 	await Brand.findByIdAndUpdate(req.params.id, update);
 	res.status(200).json({ message: 'Edited successfully' });
 });
 
 exports.deleteBrand = asyncHandler(async (req, res) => {
+	let brand = await Brand.findById(req.params.id);
+	let categories = await Category.find({ brand: req.params.id }).select(
+		'id image'
+	);
+	categories.forEach(async element => {
+		if (element.image) {
+			await AWS.deleteImages([element.image]);
+		}
+	});
+	await Product.deleteMany({ category: { $in: categories } });
+	await Category.deleteMany({ brand: req.params.id });
 	await Brand.findByIdAndDelete(req.params.id);
+	if (brand.image !== null) {
+		await AWS.deleteImages([brand.image]);
+	}
 	res.status(200).json({ message: 'Deleted Successfully' });
 });
 

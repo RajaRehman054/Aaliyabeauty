@@ -78,11 +78,15 @@ router.get(
 router.post(
 	'/category/add',
 	authenticate.verifyAdmin,
+	AWS.multerUpload.array('images'),
+	AWS.returnedUrls,
 	adminController.addCategory
 );
 router.patch(
 	'/category/edit/:id',
 	authenticate.verifyAdmin,
+	AWS.multerUpload.array('images'),
+	AWS.returnedUrls,
 	adminController.editCategory
 );
 router.delete(
@@ -163,10 +167,18 @@ router.get(
 	authenticate.verifyAdmin,
 	adminController.getSingleBrand
 );
-router.post('/brand/add', authenticate.verifyAdmin, adminController.addBrand);
+router.post(
+	'/brand/add',
+	authenticate.verifyAdmin,
+	AWS.multerUpload.array('images'),
+	AWS.returnedUrls,
+	adminController.addBrand
+);
 router.patch(
 	'/brand/edit/:id',
 	authenticate.verifyAdmin,
+	AWS.multerUpload.array('images'),
+	AWS.returnedUrls,
 	adminController.editBrand
 );
 router.delete(

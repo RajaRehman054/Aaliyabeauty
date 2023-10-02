@@ -10,6 +10,7 @@ var Category = new Schema({
 		type: mongoose.Types.ObjectId,
 		ref: 'Brand',
 	},
+	image: { type: String, default: null },
 });
 
 module.exports = mongoose.model('Category', Category);
