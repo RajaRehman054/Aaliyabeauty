@@ -147,7 +147,7 @@ router.patch(
 router.delete(
 	'/order/delete/:id',
 	authenticate.verifyAdmin,
-	adminController.deleteProduct
+	adminController.deleteOrder
 );
 
 //TODO : Brands

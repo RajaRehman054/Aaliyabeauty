@@ -292,7 +292,7 @@ exports.deleteOrder = asyncHandler(async (req, res) => {
 });
 
 exports.getSingleOrder = asyncHandler(async (req, res) => {
-	const order = await Order.findById(req.params.id);
+	const order = await Order.findById(req.params.id).populate('items.id');
 	res.status(200).json({ order });
 });
 

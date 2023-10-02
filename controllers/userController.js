@@ -193,7 +193,7 @@ exports.addUserReview = asyncHandler(async (req, res) => {
 });
 
 exports.getOrders = asyncHandler(async (req, res, next) => {
-	let orders = await Order.find({ user: req.user.id });
+	let orders = await Order.find({ user: req.user.id }).populate('items.id');
 	res.status(200).json(orders);
 });
 
