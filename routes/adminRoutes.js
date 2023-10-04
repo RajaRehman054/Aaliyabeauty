@@ -130,6 +130,11 @@ router.delete(
 //TODO: Orders
 router.get('/orders', authenticate.verifyAdmin, adminController.getOrders);
 router.get(
+	'/orders/filter',
+	authenticate.verifyAdmin,
+	adminController.getFilteredOrders
+);
+router.get(
 	'/order/:id',
 	authenticate.verifyAdmin,
 	adminController.getSingleOrder

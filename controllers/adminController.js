@@ -281,6 +281,24 @@ exports.getOrders = asyncHandler(async (req, res, next) => {
 	});
 });
 
+exports.getFilteredOrders = asyncHandler(async (req, res, next) => {
+	let { filter } = req.query;
+	const totalOrders = await Order.countDocuments();
+	const page = parseInt(req.query.page) || 1;
+	const perPage = 20;
+	const totalPages = Math.ceil(totalOrders / perPage);
+	const orders = await Order.find({ status: filter })
+		.skip((page - 1) * perPage)
+		.limit(perPage);
+	res.json({
+		totalPages,
+		totalOrders,
+		orders,
+		perPage,
+		currentPage: page,
+	});
+});
+
 exports.bestSellers = asyncHandler(async (req, res, next) => {
 	let products = await Product.find({}).sort({ sold: -1 }).limit(4);
 	res.status(200).json({ products });
