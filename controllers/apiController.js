@@ -193,3 +193,11 @@ exports.getAllBrands = asyncHandler(async (req, res, next) => {
 	}
 	res.status(200).json(data);
 });
+
+exports.getSingleBrand = asyncHandler(async (req, res, next) => {
+	const brand = await Brand.findById(req.params.id);
+	const categories = await Category.find({ brand: req.params.id }).populate(
+		'brand'
+	);
+	res.status(200).json(brand, categories);
+});

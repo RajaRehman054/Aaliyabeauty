@@ -7,6 +7,7 @@ var authenticate = require('../middleware/auth');
 router.get('/products/filter', apiController.getTrendingProducts);
 router.get('/categories', apiController.getCategories);
 router.get('/products/:name', apiController.getProductsByCategories);
+router.get('/products/categories/all/:id', apiController.getSingleBrand);
 router.get('/products/brand/:name', apiController.getAllProductsOfBrand);
 router.get('/categories/products', apiController.getAllBrands);
 router.get('/product/:name', apiController.searchProduct);
