@@ -58,6 +58,24 @@ exports.signIn = asyncHandler(async (req, res) => {
 	});
 });
 
+exports.getAdmin = asyncHandler(async (req, res) => {
+	res.json({ admin: req.user });
+});
+
+exports.editProfile = asyncHandler(async (req, res, next) => {
+	let exists = await Admin.findOne({ email: req.body.email });
+	if (exists && req.user.id !== exists.id) {
+		return res.status(401).send('Unauthorized');
+	}
+	let update = {
+		name: req.body.name,
+		email: req.body.email,
+		picture: req.uploadedUrls.length > 0 ? req.uploadedUrls[0] : '',
+	};
+	await Admin.findByIdAndUpdate(req.user.id, update);
+	res.status(200).json({ success: true });
+});
+
 exports.addCategory = asyncHandler(async (req, res) => {
 	let image = req.uploadedUrls.length > 0 ? req.uploadedUrls[0] : null;
 	await Category.create({

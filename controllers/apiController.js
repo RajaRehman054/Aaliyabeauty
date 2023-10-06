@@ -169,8 +169,13 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 	res.status(200).json(product);
 });
 
-exports.getOffers = asyncHandler(async (req, res, next) => {
+exports.getOffer = asyncHandler(async (req, res, next) => {
 	const offers = await Offer.findById(req.params.id);
+	res.status(200).json(offers);
+});
+
+exports.getAllOffers = asyncHandler(async (req, res, next) => {
+	const offers = await Offer.find({});
 	res.status(200).json(offers);
 });
 

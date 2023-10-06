@@ -13,7 +13,8 @@ router.get('/categories/products', apiController.getAllBrands);
 router.get('/product/:name', apiController.searchProduct);
 router.get('/product/single/:id', apiController.getProduct);
 router.get('/product/review/:id', apiController.getProductReviews);
-router.get('/offers', apiController.getOffers);
+router.get('/offer/:id', apiController.getOffer);
+router.get('/offers', apiController.getAllOffers);
 router.post('/cart/items', apiController.getCartProducts);
 
 router.post(

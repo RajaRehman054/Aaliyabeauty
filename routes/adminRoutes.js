@@ -12,6 +12,14 @@ router.post(
 	passport.authenticate('local-admin'),
 	adminController.signIn
 );
+router.get('/admin', authenticate.verifyAdmin, adminController.getAdmin);
+router.patch(
+	'/profile/edit',
+	authenticate.verifyAdmin,
+	AWS.multerUpload.array('images'),
+	AWS.returnedUrls,
+	adminController.editProfile
+);
 
 //TODO : Random
 router.get('/users', authenticate.verifyAdmin, adminController.getUsers);
