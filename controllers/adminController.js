@@ -283,7 +283,7 @@ exports.getOrders = asyncHandler(async (req, res, next) => {
 
 exports.getFilteredOrders = asyncHandler(async (req, res, next) => {
 	let { filter } = req.query;
-	const totalOrders = await Order.countDocuments();
+	const totalOrders = await Order.countDocuments({ status: filter });
 	const page = parseInt(req.query.page) || 1;
 	const perPage = 20;
 	const totalPages = Math.ceil(totalOrders / perPage);
@@ -409,5 +409,5 @@ exports.searchBrand = asyncHandler(async (req, res, next) => {
 	var brands = await Brand.find({
 		name: { $regex: new RegExp(query, 'i') },
 	});
-	res.status(200).json(brands);
+	res.status(200).json({ brands });
 });
