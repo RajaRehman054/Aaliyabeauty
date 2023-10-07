@@ -267,6 +267,11 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 	});
 });
 
+exports.getSingleUser = asyncHandler(async (req, res) => {
+	const user = await User.findById(req.params.id);
+	res.status(200).json({ user });
+});
+
 exports.searchUser = asyncHandler(async (req, res, next) => {
 	let query = req.query.name;
 	var user = await User.find({

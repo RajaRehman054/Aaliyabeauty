@@ -24,6 +24,11 @@ router.patch(
 //TODO : Random
 router.get('/users', authenticate.verifyAdmin, adminController.getUsers);
 router.get(
+	'/user/:id',
+	authenticate.verifyAdmin,
+	adminController.getSingleUser
+);
+router.get(
 	'/users/search',
 	authenticate.verifyAdmin,
 	adminController.searchUser

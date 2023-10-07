@@ -11,7 +11,7 @@ var orderSchema = new Schema(
 		city: { type: String },
 		region: { type: String },
 		country: { type: String },
-		method: { type: String, enum: ['pickup ', 'online'] },
+		method: { type: String, enum: ['pickup', 'online'] },
 		items: {
 			type: [
 				{
@@ -40,7 +40,7 @@ var orderSchema = new Schema(
 		card_cvv: { type: Number },
 		card_date: { type: String },
 		user: { type: mongoose.Types.ObjectId, ref: 'User' },
-		payment: { type: String, default: 'card', enum: ['cod ', 'card'] },
+		payment: { type: String, default: 'card', enum: ['cod', 'card'] },
 	},
 	{ timestamps: true }
 );
