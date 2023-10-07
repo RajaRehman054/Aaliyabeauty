@@ -33,6 +33,13 @@ router.get(
 	authenticate.verifyAdmin,
 	adminController.searchUser
 );
+router.patch(
+	'/user/edit/:id',
+	authenticate.verifyAdmin,
+	AWS.multerUpload.array('images'),
+	AWS.returnedUrls,
+	adminController.editUser
+);
 router.get('/dashboard', authenticate.verifyAdmin, adminController.bestSellers);
 
 //TODO: Offers

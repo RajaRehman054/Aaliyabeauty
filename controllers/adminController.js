@@ -280,6 +280,21 @@ exports.searchUser = asyncHandler(async (req, res, next) => {
 	res.status(200).json(user);
 });
 
+exports.editUser = asyncHandler(async (req, res, next) => {
+	let exists = await User.findOne({ email: req.body.email });
+	let user = await User.findById(req.params.id);
+	if (exists && user.id !== exists.id) {
+		return res.status(401).send('Email already assigned to a user.');
+	}
+	let update = {
+		name: req.body.name,
+		email: req.body.email,
+		picture: req.uploadedUrls.length > 0 ? req.uploadedUrls[0] : '',
+	};
+	await User.findByIdAndUpdate(req.params.id, update);
+	res.status(200).json({ success: true });
+});
+
 exports.completeOrder = asyncHandler(async (req, res, next) => {
 	await Order.findByIdAndUpdate(req.params.id, {
 		status: 'completed',
