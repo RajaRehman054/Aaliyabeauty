@@ -174,6 +174,16 @@ exports.getOffer = asyncHandler(async (req, res, next) => {
 	res.status(200).json(offers);
 });
 
+exports.getOffersOfBrand = asyncHandler(async (req, res, next) => {
+	const offers = await Offer.find({ brand: req.params.id });
+	res.status(200).json(offers);
+});
+
+exports.getGlobalOffers = asyncHandler(async (req, res, next) => {
+	const offers = await Offer.find({ all: true });
+	res.status(200).json(offers);
+});
+
 exports.getAllOffers = asyncHandler(async (req, res, next) => {
 	const offers = await Offer.find({});
 	res.status(200).json(offers);

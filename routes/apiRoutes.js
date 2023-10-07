@@ -15,6 +15,8 @@ router.get('/product/single/:id', apiController.getProduct);
 router.get('/product/review/:id', apiController.getProductReviews);
 router.get('/offer/:id', apiController.getOffer);
 router.get('/offers', apiController.getAllOffers);
+router.get('/offers/global', apiController.getGlobalOffers);
+router.get('/offers/brand/:id', apiController.getOffersOfBrand);
 router.post('/cart/items', apiController.getCartProducts);
 
 router.post(
