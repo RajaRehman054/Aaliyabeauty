@@ -15,6 +15,8 @@ var Offer = new Schema({
 	},
 	discount: { type: Number },
 	images: [{ type: String }],
+	brand: { type: mongoose.Types.ObjectId, ref: 'Brand' },
+	all: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model('Offer', Offer);
