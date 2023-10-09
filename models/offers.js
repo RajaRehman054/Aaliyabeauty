@@ -13,6 +13,12 @@ var Offer = new Schema({
 	ending_date: {
 		type: String,
 	},
+	starting: {
+		type: Number,
+	},
+	ending: {
+		type: Number,
+	},
 	discount: { type: Number },
 	images: [{ type: String }],
 	brand: { type: mongoose.Types.ObjectId, ref: 'Brand' },

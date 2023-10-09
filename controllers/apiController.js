@@ -175,17 +175,29 @@ exports.getOffer = asyncHandler(async (req, res, next) => {
 });
 
 exports.getOffersOfBrand = asyncHandler(async (req, res, next) => {
-	const offers = await Offer.find({ brand: req.params.id });
+	const offers = await Offer.find({
+		brand: req.params.id,
+		starting: { $lte: time },
+		ending: { $gte: time },
+	});
 	res.status(200).json(offers);
 });
 
 exports.getGlobalOffers = asyncHandler(async (req, res, next) => {
-	const offers = await Offer.find({ all: true });
+	const offers = await Offer.find({
+		all: true,
+		starting: { $lte: time },
+		ending: { $gte: time },
+	});
 	res.status(200).json(offers);
 });
 
 exports.getAllOffers = asyncHandler(async (req, res, next) => {
-	const offers = await Offer.find({});
+	const time = Date.now();
+	const offers = await Offer.find({
+		starting: { $lte: time },
+		ending: { $gte: time },
+	});
 	res.status(200).json(offers);
 });
 
@@ -196,7 +208,7 @@ exports.getCartProducts = asyncHandler(async (req, res, next) => {
 		let product = await Product.findById(array[index]).populate('category');
 		data.push(product);
 	}
-	res.status(200).json(data);
+	res.status(200).json({ data });
 });
 
 exports.getAllBrands = asyncHandler(async (req, res, next) => {
@@ -206,7 +218,7 @@ exports.getAllBrands = asyncHandler(async (req, res, next) => {
 		let categories = await Category.find({ brand: brands[index].id });
 		data.push({ brand: brands[index], categories });
 	}
-	res.status(200).json(data);
+	res.status(200).json({ data });
 });
 
 exports.getSingleBrand = asyncHandler(async (req, res, next) => {
@@ -214,5 +226,5 @@ exports.getSingleBrand = asyncHandler(async (req, res, next) => {
 	const categories = await Category.find({ brand: req.params.id }).populate(
 		'brand'
 	);
-	res.status(200).json(brand, categories);
+	res.status(200).json({ brand, categories });
 });

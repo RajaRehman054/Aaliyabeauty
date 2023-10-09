@@ -221,7 +221,11 @@ exports.searchProduct = asyncHandler(async (req, res, next) => {
 
 exports.addOffer = asyncHandler(async (req, res, next) => {
 	let images = req.uploadedUrls;
-	await Offer.create({ ...req.body, images });
+	var date1 = new Date(req.body.starting_date);
+	var date2 = new Date(req.body.ending_date);
+	var starting = date1.getTime();
+	var ending = date2.getTime();
+	await Offer.create({ ...req.body, images, starting, ending });
 	res.status(201).json({ message: 'Offer created' });
 });
 
@@ -237,7 +241,16 @@ exports.getSingleOffer = asyncHandler(async (req, res) => {
 
 exports.editOffer = asyncHandler(async (req, res) => {
 	let images = req.uploadedUrls;
-	await Offer.findByIdAndUpdate(req.params.id, { ...req.body, images });
+	var date1 = new Date(req.body.starting_date);
+	var date2 = new Date(req.body.ending_date);
+	var starting = date1.getTime();
+	var ending = date2.getTime();
+	await Offer.findByIdAndUpdate(req.params.id, {
+		...req.body,
+		images,
+		starting,
+		ending,
+	});
 	res.status(201).json({ message: 'Offer edited' });
 });
 
