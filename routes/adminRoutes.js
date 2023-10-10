@@ -20,6 +20,11 @@ router.patch(
 	AWS.returnedUrls,
 	adminController.editProfile
 );
+router.delete(
+	'/review/delete/:id',
+	authenticate.verifyAdmin,
+	adminController.deleteReview
+);
 
 //TODO : Random
 router.get('/users', authenticate.verifyAdmin, adminController.getUsers);

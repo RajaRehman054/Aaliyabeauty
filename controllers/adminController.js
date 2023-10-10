@@ -12,6 +12,7 @@ var Offer = require('../models/offers');
 var User = require('../models/users');
 var Order = require('../models/order');
 var Brand = require('../models/brand');
+var Review = require('../models/review');
 
 exports.register = async (req, res, next) => {
 	var exists = await Admin.findOne({ email: req.body.email });
@@ -461,4 +462,9 @@ exports.searchBrand = asyncHandler(async (req, res, next) => {
 		name: { $regex: new RegExp(query, 'i') },
 	});
 	res.status(200).json({ brands });
+});
+
+exports.deleteReview = asyncHandler(async (req, res, next) => {
+	await Review.findByIdAndDelete(req.params.id);
+	res.status(200).json({ message: 'Review deleted successfully.' });
 });
