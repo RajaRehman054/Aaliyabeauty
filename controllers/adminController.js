@@ -470,11 +470,13 @@ exports.deleteReview = asyncHandler(async (req, res, next) => {
 });
 
 exports.getReviews = asyncHandler(async (req, res, next) => {
-	const totalReviews = await Review.countDocuments({ brand: req.params.id });
+	const totalReviews = await Review.countDocuments({
+		product: req.params.id,
+	});
 	const page = parseInt(req.query.page) || 1;
 	const perPage = 20;
 	const totalPages = Math.ceil(totalReviews / perPage);
-	const reviews = await Review.find({ brand: req.params.id })
+	const reviews = await Review.find({ product: req.params.id })
 		.skip((page - 1) * perPage)
 		.limit(perPage);
 	res.json({

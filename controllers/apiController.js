@@ -228,3 +228,8 @@ exports.getSingleBrand = asyncHandler(async (req, res, next) => {
 	);
 	res.status(200).json({ brand, categories });
 });
+
+exports.getReviewsLimited = asyncHandler(async (req, res, next) => {
+	const reviews = await Review.find({}).limit(5);
+	res.status(200).json({ reviews });
+});

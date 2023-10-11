@@ -5,6 +5,7 @@ var apiController = require('../controllers/apiController');
 var authenticate = require('../middleware/auth');
 
 router.get('/products/filter', apiController.getTrendingProducts);
+router.get('/reviews/limit', apiController.getReviewsLimited);
 router.get('/categories', apiController.getCategories);
 router.get('/products/:name', apiController.getProductsByCategories);
 router.get('/products/categories/all/:id', apiController.getSingleBrand);
