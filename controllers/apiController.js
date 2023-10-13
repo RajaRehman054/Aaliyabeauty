@@ -1,5 +1,6 @@
 var nodemailer = require('nodemailer');
 var asyncHandler = require('../middleware/asyncHandler');
+var stripe = require('stripe')(process.env.SECRET_KEY);
 
 var User = require('../models/users');
 var Order = require('../models/order');
@@ -232,4 +233,17 @@ exports.getSingleBrand = asyncHandler(async (req, res, next) => {
 exports.getReviewsLimited = asyncHandler(async (req, res, next) => {
 	const reviews = await Review.find({}).limit(5);
 	res.status(200).json({ reviews });
+});
+
+exports.createPayment = asyncHandler(async (req, res, next) => {
+	const paymentIntent = await stripe.paymentIntents.create({
+		amount: req.body.amount,
+		currency: 'EUR',
+		automatic_payment_methods: {
+			enabled: true,
+		},
+	});
+	res.json({
+		clientSecret: paymentIntent.client_secret,
+	});
 });

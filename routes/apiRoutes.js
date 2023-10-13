@@ -27,4 +27,11 @@ router.post(
 	apiController.createOrderUser
 );
 
+router.post(
+	'/payment/create',
+	apiController.createOrderCustomer,
+	authenticate.verifyUser,
+	apiController.createPayment
+);
+
 module.exports = router;
