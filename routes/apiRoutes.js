@@ -27,11 +27,7 @@ router.post(
 	apiController.createOrderUser
 );
 
-router.post(
-	'/payment/create',
-	apiController.createOrderCustomer,
-	authenticate.verifyUser,
-	apiController.createPayment
-);
+router.post('/payment/create', apiController.createPayment);
+router.patch('/payment/update/:id', apiController.updatePayment);
 
 module.exports = router;
