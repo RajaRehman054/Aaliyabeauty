@@ -352,8 +352,44 @@ exports.getFilteredOrders = asyncHandler(async (req, res, next) => {
 });
 
 exports.bestSellers = asyncHandler(async (req, res, next) => {
+	let users = await User.countDocuments();
+	let ordersInQueu = await Order.countDocuments({ status: 'pending' });
+	let results = await Product.aggregate([
+		{
+			$group: {
+				_id: null,
+				totalSold: { $sum: '$sold' },
+			},
+		},
+	]);
+	let totalProductsSold = results[0] ? results[0].totalSold : 0;
+	let graph = await Order.aggregate([
+		{
+			$project: {
+				month: { $month: '$createdAt' },
+				total: 1,
+			},
+		},
+		{
+			$group: {
+				_id: '$month',
+				totalRevenue: { $sum: '$total' },
+			},
+		},
+		{
+			$sort: {
+				_id: 1,
+			},
+		},
+	]);
 	let products = await Product.find({}).sort({ sold: -1 }).limit(4);
-	res.status(200).json({ products });
+	res.status(200).json({
+		products,
+		users,
+		ordersInQueu,
+		graph,
+		totalProductsSold,
+	});
 });
 
 exports.deleteOrder = asyncHandler(async (req, res) => {

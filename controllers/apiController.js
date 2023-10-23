@@ -1,6 +1,7 @@
 var nodemailer = require('nodemailer');
 var asyncHandler = require('../middleware/asyncHandler');
 var stripe = require('stripe')(process.env.STRIPE_KEY_TEST);
+var ErrorHandler = require('../utils/error');
 
 var User = require('../models/users');
 var Order = require('../models/order');
