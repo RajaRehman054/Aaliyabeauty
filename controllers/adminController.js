@@ -363,6 +363,15 @@ exports.bestSellers = asyncHandler(async (req, res, next) => {
 		},
 	]);
 	let totalProductsSold = results[0] ? results[0].totalSold : 0;
+	let resultsRevenue = await Order.aggregate([
+		{
+			$group: {
+				_id: null,
+				total: { $sum: '$total' },
+			},
+		},
+	]);
+	let totalRevenue = resultsRevenue[0] ? resultsRevenue[0].total : 0;
 	let graph = await Order.aggregate([
 		{
 			$project: {
@@ -389,6 +398,7 @@ exports.bestSellers = asyncHandler(async (req, res, next) => {
 		ordersInQueu,
 		graph,
 		totalProductsSold,
+		totalRevenue,
 	});
 });
 
