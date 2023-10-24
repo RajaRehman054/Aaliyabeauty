@@ -354,6 +354,13 @@ exports.getFilteredOrders = asyncHandler(async (req, res, next) => {
 exports.bestSellers = asyncHandler(async (req, res, next) => {
 	let users = await User.countDocuments();
 	let ordersInQueu = await Order.countDocuments({ status: 'pending' });
+	let pieChartData = [];
+	let pieChart = Product.find({}).sort({ sold: -1, price: -1 }).limit(3);
+	for (let index = 0; index < pieChart.length; index++) {
+		let totalPrice = pieChart[index].sold * pieChart[index].price;
+		let obj = { ...pieChart[index], totalPrice };
+		pieChartData.push(obj);
+	}
 	let results = await Product.aggregate([
 		{
 			$group: {
@@ -399,6 +406,7 @@ exports.bestSellers = asyncHandler(async (req, res, next) => {
 		graph,
 		totalProductsSold,
 		totalRevenue,
+		pieChartData,
 	});
 });
 
