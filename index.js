@@ -16,18 +16,6 @@ var User = require('./routes/userRoutes');
 var Admin = require('./routes/adminRoutes');
 var Api = require('./routes/apiRoutes');
 
-var whitelist = [process.env.CLIENT_URI];
-var corsOptions = {
-	credentials: true,
-	origin: function (origin, callback) {
-		if (whitelist.indexOf(origin) !== -1) {
-			callback(null, true);
-		} else {
-			callback(new Error('Not allowed by CORS'));
-		}
-	},
-};
-
 app.listen(process.env.PORT, () => {
 	console.log(`Running on port ${process.env.PORT} 👍.`);
 });
@@ -37,7 +25,12 @@ app.use(logger('dev'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: false }));
 app.use(cookieParser());
-process.env.ENV === 'PRODUCTION' ? app.use(cors(corsOptions)) : app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.CLIENT_URI,
+  }),
+);
 app.use(
 	session({
 		secret: process.env.SECRET,
